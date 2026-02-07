@@ -6,3 +6,7 @@ DerivedData/
 node_modules/
 .wrangler/
 proxy/node_modules/
+.claude
+CLAUDE.MD
+*.md
+
