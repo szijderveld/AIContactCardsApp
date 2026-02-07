@@ -1,0 +1,8 @@
+.DS_Store
+*.xcuserstate
+xcuserdata/
+DerivedData/
+.build/
+node_modules/
+.wrangler/
+proxy/node_modules/
