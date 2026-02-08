@@ -6,15 +6,15 @@
 ## Phase 1: Foundation
 Goal: Get data models working and display people/facts on screen.
 
-- [ ] **Step 1: Xcode project setup**
+- [x] **Step 1: Xcode project setup**
   Create Xcode project with SwiftUI + SwiftData. Verify it builds and runs on simulator showing the default template. Set deployment target to iOS 17.0.
   Files: `AIContactCardApp.swift`
 
-- [ ] **Step 2: SwiftData models**
+- [x] **Step 2: SwiftData models**
   Create Person, Fact, and Entry models matching `docs/architecture.md` spec. Register them in the SwiftData model container. Verify build.
   Files: `Models/Person.swift`, `Models/Fact.swift`, `Models/Entry.swift`, update `AIContactCardApp.swift`
 
-- [ ] **Step 3: People list + detail views**
+- [x] **Step 3: People list + detail views**
   Create PeopleListView showing all Person objects in a List with NavigationStack. Tapping navigates to PersonDetailView showing name, summary, and facts grouped by category. Add a TabView with People and Settings tabs as the root navigation.
   Files: `Views/PeopleListView.swift`, `Views/PersonDetailView.swift`, `Views/ContentView.swift`
 

@@ -1,11 +1,27 @@
+# macOS
 .DS_Store
-*.xcuserstate
+
+# Xcode
 xcuserdata/
+*.xcuserstate
 DerivedData/
+build/
+*.ipa
+*.dSYM.zip
+*.dSYM
+
+# Swift Package Manager
 .build/
-node_modules/
-.wrangler/
+.swiftpm/
+
+# Cloudflare Worker (for later)
 proxy/node_modules/
+proxy/.wrangler/
+
+# Claude Code local config
+.claude/settings.local
+
+
 .claude
 CLAUDE.MD
 *.md
