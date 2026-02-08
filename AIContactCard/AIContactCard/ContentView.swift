@@ -9,6 +9,8 @@ import SwiftUI
 import SwiftData
 
 struct ContentView: View {
+    @Environment(ContactSyncService.self) private var contactSyncService
+
     var body: some View {
         TabView {
             RecordView()
@@ -34,10 +36,19 @@ struct ContentView: View {
                 Label("Settings", systemImage: "gear")
             }
         }
+        .task {
+            let granted = await contactSyncService.requestAccess()
+            if granted {
+                contactSyncService.fetchAllContacts()
+            }
+        }
     }
 }
 
 #Preview {
     ContentView()
         .modelContainer(for: [Person.self, Fact.self, Entry.self], inMemory: true)
+        .environment(ContactSyncService())
+        .environment(VoiceService())
+        .environment(AIService())
 }

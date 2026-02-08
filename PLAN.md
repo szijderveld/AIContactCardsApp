@@ -44,7 +44,7 @@ Goal: Speak about someone, have AI extract structured data, store it.
 ## Phase 3: Query + Contacts
 Goal: Ask questions about your people. Integrate iPhone contacts.
 
-- [ ] **Step 9: Apple Contacts integration (read)**
+- [x] **Step 9: Apple Contacts integration (read)**
   Create ContactSyncService that reads iPhone contacts via CNContactStore. Fetch name, nickname, organization, job title, emails, phones. Create ContactSummary struct. Request contacts permission and handle denial.
   Files: `Services/ContactSyncService.swift`, update `Info.plist` permissions
 
