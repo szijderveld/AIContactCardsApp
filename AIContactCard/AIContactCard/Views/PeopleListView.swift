@@ -8,6 +8,7 @@ import SwiftData
 
 struct PeopleListView: View {
     @Query(sort: \Person.name) private var people: [Person]
+    @State private var showingAddPerson = false
 
     var body: some View {
         Group {
@@ -32,6 +33,18 @@ struct PeopleListView: View {
             }
         }
         .navigationTitle("People")
+        .toolbar {
+            ToolbarItem(placement: .primaryAction) {
+                Button {
+                    showingAddPerson = true
+                } label: {
+                    Image(systemName: "plus")
+                }
+            }
+        }
+        .sheet(isPresented: $showingAddPerson) {
+            AddPersonSheet()
+        }
     }
 }
 

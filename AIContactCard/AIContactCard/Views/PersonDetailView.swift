@@ -8,6 +8,7 @@ import SwiftData
 
 struct PersonDetailView: View {
     let person: Person
+    @State private var showingAddFact = false
 
     private var groupedFacts: [(String, [Fact])] {
         let grouped = Dictionary(grouping: person.facts, by: \.category)
@@ -38,6 +39,18 @@ struct PersonDetailView: View {
             }
         }
         .navigationTitle(person.name)
+        .toolbar {
+            ToolbarItem(placement: .primaryAction) {
+                Button {
+                    showingAddFact = true
+                } label: {
+                    Image(systemName: "plus")
+                }
+            }
+        }
+        .sheet(isPresented: $showingAddFact) {
+            AddFactSheet(person: person)
+        }
     }
 }
 

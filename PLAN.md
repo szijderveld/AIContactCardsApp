@@ -18,7 +18,7 @@ Goal: Get data models working and display people/facts on screen.
   Create PeopleListView showing all Person objects in a List with NavigationStack. Tapping navigates to PersonDetailView showing name, summary, and facts grouped by category. Add a TabView with People and Settings tabs as the root navigation.
   Files: `Views/PeopleListView.swift`, `Views/PersonDetailView.swift`, `Views/ContentView.swift`
 
-- [ ] **Step 4: Manual data entry**
+- [x] **Step 4: Manual data entry**
   Add ability to create a Person (+ button → sheet with name field) and add Facts to a Person (+ button on detail → sheet with category picker + text field). This validates the data layer works end-to-end before adding AI.
   Files: `Components/AddPersonSheet.swift`, `Components/AddFactSheet.swift`, update detail view
 
