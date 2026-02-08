@@ -25,7 +25,7 @@ Goal: Get data models working and display people/facts on screen.
 ## Phase 2: Voice + AI
 Goal: Speak about someone, have AI extract structured data, store it.
 
-- [ ] **Step 5: Voice recording + transcription**
+- [x] **Step 5: Voice recording + transcription**
   Create VoiceService using Apple Speech framework. Request microphone + speech recognition permissions. Record audio, transcribe in real-time, return final transcript. Create RecordView with mic button and live transcript display.
   Files: `Services/VoiceService.swift`, `Views/RecordView.swift`, update `Info.plist` permissions
 

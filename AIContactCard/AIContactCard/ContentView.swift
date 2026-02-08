@@ -11,6 +11,11 @@ import SwiftData
 struct ContentView: View {
     var body: some View {
         TabView {
+            RecordView()
+                .tabItem {
+                    Label("Record", systemImage: "mic.circle.fill")
+                }
+
             NavigationStack {
                 PeopleListView()
                     .navigationDestination(for: Person.self) { person in

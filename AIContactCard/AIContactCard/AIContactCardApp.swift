@@ -10,9 +10,12 @@ import SwiftData
 
 @main
 struct AIContactCardApp: App {
+    @State private var voiceService = VoiceService()
+
     var body: some Scene {
         WindowGroup {
             ContentView()
+                .environment(voiceService)
         }
         .modelContainer(for: [Person.self, Fact.self, Entry.self])
     }
