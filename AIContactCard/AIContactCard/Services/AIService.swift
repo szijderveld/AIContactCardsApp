@@ -114,11 +114,13 @@ class AIService {
                                         "category": ["type": "string"],
                                         "content": ["type": "string"]
                                     ],
-                                    "required": ["category", "content"]
+                                    "required": ["category", "content"],
+                                    "additionalProperties": false
                                 ]
                             ]
                         ],
-                        "required": ["name", "aliases", "facts"]
+                        "required": ["name", "aliases", "facts"],
+                        "additionalProperties": false
                     ]
                 ]
             ],

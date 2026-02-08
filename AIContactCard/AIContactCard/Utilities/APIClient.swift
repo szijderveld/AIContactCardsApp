@@ -23,7 +23,7 @@ enum APIError: Error, LocalizedError {
 }
 
 struct APIClient {
-    static let proxyURL = "https://ai-contact-card-proxy.samu-z.workers.dev"
+    static let proxyURL = "https://ai-contact-card-proxy.ai-contact-cards-sz.workers.dev"
     static let model = "claude-sonnet-4-5-20250929"
 
     /// Standard call (query) — free-form text response

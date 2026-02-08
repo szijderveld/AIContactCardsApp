@@ -37,7 +37,7 @@ Goal: Speak about someone, have AI extract structured data, store it.
   Create APIClient for HTTP calls to the proxy. Create AIService with `extract()` and `query()` methods. Define response structs (ExtractionResult, ExtractedContact, ExtractedFact). Use prompts from `docs/prompts.md`. Handle errors gracefully.
   Files: `Services/AIService.swift`, `Utilities/APIClient.swift`
 
-- [ ] **Step 8: Ingest pipeline end-to-end**
+- [x] **Step 8: Ingest pipeline end-to-end**
   Wire RecordView → VoiceService → AIService.extract() → SwiftData storage. When user finishes recording, send transcript to AI, parse response, create/update Person and Fact objects. Show confirmation of what was extracted. This is the core feature — test thoroughly.
   Files: Update `Views/RecordView.swift`, possibly add `Components/ExtractionResultView.swift`
 
