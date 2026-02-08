@@ -22,8 +22,15 @@ struct PeopleListView: View {
                 List(people) { person in
                     NavigationLink(value: person) {
                         VStack(alignment: .leading) {
-                            Text(person.name)
-                                .font(.headline)
+                            HStack(spacing: 6) {
+                                Text(person.name)
+                                    .font(.headline)
+                                if person.contactIdentifier != nil {
+                                    Image(systemName: "person.crop.circle.badge.checkmark")
+                                        .font(.subheadline)
+                                        .foregroundStyle(.secondary)
+                                }
+                            }
                             Text("\(person.facts.count) facts")
                                 .font(.subheadline)
                                 .foregroundStyle(.secondary)

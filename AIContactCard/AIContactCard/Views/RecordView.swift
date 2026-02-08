@@ -9,6 +9,7 @@ import SwiftData
 struct RecordView: View {
     @Environment(VoiceService.self) private var voiceService
     @Environment(AIService.self) private var aiService
+    @Environment(ContactSyncService.self) private var contactSyncService
     @Environment(\.modelContext) private var modelContext
 
     @Query private var people: [Person]
@@ -91,7 +92,13 @@ struct RecordView: View {
                 extractionResult = nil
             } content: {
                 if let result = extractionResult {
-                    ExtractionResultView(result: result)
+                    ExtractionResultView(
+                        result: result,
+                        transcript: voiceService.transcript,
+                        existingPeople: people,
+                        allContacts: contactSyncService.allContacts,
+                        onSave: {}
+                    )
                 }
             }
         }
@@ -135,9 +142,8 @@ struct RecordView: View {
             let result = try await aiService.extract(
                 transcript: transcript,
                 people: people,
-                contacts: []
+                contacts: contactSyncService.allContacts
             )
-            persistExtraction(result, transcript: transcript)
             extractionResult = result
             isProcessing = false
             showResult = true
@@ -148,38 +154,12 @@ struct RecordView: View {
         }
     }
 
-    private func persistExtraction(_ result: ExtractionResult, transcript: String) {
-        for contact in result.contacts {
-            let person: Person
-
-            if let matchedId = contact.matchedPersonId,
-               let existing = people.first(where: { $0.id.uuidString == matchedId }) {
-                person = existing
-                // Merge aliases
-                for alias in contact.aliases where !person.aliases.contains(alias) {
-                    person.aliases.append(alias)
-                }
-            } else {
-                person = Person(name: contact.name)
-                person.aliases = contact.aliases
-                modelContext.insert(person)
-            }
-
-            for extractedFact in contact.facts {
-                let fact = Fact(category: extractedFact.category, content: extractedFact.content)
-                fact.rawTranscript = transcript
-                fact.person = person
-                modelContext.insert(fact)
-            }
-
-            person.updatedAt = Date()
-        }
-    }
 }
 
 #Preview {
     RecordView()
         .environment(VoiceService())
         .environment(AIService())
+        .environment(ContactSyncService())
         .modelContainer(for: [Person.self, Fact.self, Entry.self], inMemory: true)
 }

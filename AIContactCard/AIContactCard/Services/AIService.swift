@@ -11,10 +11,16 @@ struct ExtractionResult: Codable {
     let contacts: [ExtractedContact]
 }
 
+struct MatchCandidate: Codable {
+    let contactId: String
+    let contactName: String
+    let confidence: String  // "high", "medium", "low"
+}
+
 struct ExtractedContact: Codable {
     let name: String
     let matchedPersonId: String?
-    let matchedContactId: String?
+    let matchCandidates: [MatchCandidate]
     let aliases: [String]
     let facts: [ExtractedFact]
 }
@@ -62,7 +68,9 @@ class AIService {
             {
               "name": "Full Name",
               "matched_person_id": "existing-person-uuid-if-matched-or-null",
-              "matched_contact_id": "apple-contact-identifier-if-matched-or-null",
+              "match_candidates": [
+                { "contact_id": "apple-contact-id", "contact_name": "David Chen (Google)", "confidence": "high" }
+              ],
               "aliases": ["nickname1", "nickname2"],
               "facts": [
                 { "category": "work", "content": "VP at Goldman Sachs" },
@@ -74,12 +82,19 @@ class AIService {
 
         CATEGORIES: work, family, interests, location, education, personality, relationship, health, events, appearance, preferences, other
 
-        RULES:
+        MATCH CANDIDATES RULES:
+        - Return ALL plausible iPhone contact matches in match_candidates, ranked by confidence
+        - "high" = strong match (name + company/context match, or only one person with that name)
+        - "medium" = possible match (name matches but multiple candidates or no confirming context)
+        - "low" = weak match (partial name match only)
+        - Include the contact's name and organization in contact_name for display (e.g. "David Chen (Google)")
+        - If no contacts match at all, return an empty match_candidates array
+
+        GENERAL RULES:
         - One atomic fact per entry — never combine multiple facts into one
         - Match existing people/contacts by name similarity before creating new entries
-        - If "Jerry" is mentioned and a contact "Jeremy Smith" at Goldman exists, match them
+        - If "Jerry" is mentioned and a contact "Jeremy Smith" at Goldman exists, include as candidate
         - Include context clues like when or where info was learned if mentioned
-        - Be conservative with matching — only match when confident
         - If a person is mentioned but no facts are given about them, still include them with an empty facts array
         - Preserve the user's phrasing as much as possible in fact content
         - If unsure about a name spelling, use your best guess
@@ -104,7 +119,19 @@ class AIService {
                         "properties": [
                             "name": ["type": "string"],
                             "matched_person_id": ["type": ["string", "null"]],
-                            "matched_contact_id": ["type": ["string", "null"]],
+                            "match_candidates": [
+                                "type": "array",
+                                "items": [
+                                    "type": "object",
+                                    "properties": [
+                                        "contact_id": ["type": "string"],
+                                        "contact_name": ["type": "string"],
+                                        "confidence": ["type": "string"]
+                                    ],
+                                    "required": ["contact_id", "contact_name", "confidence"],
+                                    "additionalProperties": false
+                                ]
+                            ],
                             "aliases": ["type": "array", "items": ["type": "string"]],
                             "facts": [
                                 "type": "array",
@@ -119,7 +146,7 @@ class AIService {
                                 ]
                             ]
                         ],
-                        "required": ["name", "aliases", "facts"],
+                        "required": ["name", "match_candidates", "aliases", "facts"],
                         "additionalProperties": false
                     ]
                 ]
