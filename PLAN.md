@@ -29,7 +29,7 @@ Goal: Speak about someone, have AI extract structured data, store it.
   Create VoiceService using Apple Speech framework. Request microphone + speech recognition permissions. Record audio, transcribe in real-time, return final transcript. Create RecordView with mic button and live transcript display.
   Files: `Services/VoiceService.swift`, `Views/RecordView.swift`, update `Info.plist` permissions
 
-- [ ] **Step 6: Cloudflare Worker proxy**
+- [x] **Step 6: Cloudflare Worker proxy**
   Create the API proxy that accepts requests, adds the Claude API key for managed mode, and passes through for BYOK mode. Deploy to Cloudflare. Test with curl.
   Files: `proxy/src/index.js`, `proxy/wrangler.toml`, `proxy/package.json`
 

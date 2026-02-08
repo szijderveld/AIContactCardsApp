@@ -1,0 +1,3 @@
+name = "ai-contact-card-proxy"
+main = "src/index.js"
+compatibility_date = "2024-01-01"
