@@ -33,7 +33,7 @@ Goal: Speak about someone, have AI extract structured data, store it.
   Create the API proxy that accepts requests, adds the Claude API key for managed mode, and passes through for BYOK mode. Deploy to Cloudflare. Test with curl.
   Files: `proxy/src/index.js`, `proxy/wrangler.toml`, `proxy/package.json`
 
-- [ ] **Step 7: AIService + API client**
+- [x] **Step 7: AIService + API client**
   Create APIClient for HTTP calls to the proxy. Create AIService with `extract()` and `query()` methods. Define response structs (ExtractionResult, ExtractedContact, ExtractedFact). Use prompts from `docs/prompts.md`. Handle errors gracefully.
   Files: `Services/AIService.swift`, `Utilities/APIClient.swift`
 
