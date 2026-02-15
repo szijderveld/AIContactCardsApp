@@ -63,7 +63,7 @@ Goal: Ask questions about your people. Integrate iPhone contacts.
 ## Phase 4: Credits + Polish
 Goal: Billing works. Settings complete. App feels finished.
 
-- [ ] **Step 13: CreditManager**
+- [x] **Step 13: CreditManager**
   Create CreditManager as @Observable class. Store balance in UserDefaults. Methods: consume() → Bool, add(amount), grantFreeCreditsIfNeeded() (50 free on first launch). Properties: hasCredits, isLow. Wire into AIService so every API call checks credits first. Show purchase prompt when empty.
   Files: `Services/CreditManager.swift`, update `Services/AIService.swift`
 

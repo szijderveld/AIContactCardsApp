@@ -9,6 +9,7 @@ enum APIError: Error, LocalizedError {
     case httpError(statusCode: Int, body: String)
     case networkError(Error)
     case invalidResponse
+    case insufficientCredits
 
     var errorDescription: String? {
         switch self {
@@ -18,6 +19,8 @@ enum APIError: Error, LocalizedError {
             return "Network error: \(error.localizedDescription)"
         case .invalidResponse:
             return "Invalid response from server"
+        case .insufficientCredits:
+            return "No credits remaining. Purchase more to continue."
         }
     }
 }

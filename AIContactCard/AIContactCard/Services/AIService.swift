@@ -48,7 +48,11 @@ struct ContactSummary: Codable {
 class AIService {
     static let model = "claude-sonnet-4-5-20250929"
 
-    func extract(transcript: String, people: [Person], contacts: [ContactSummary]) async throws -> ExtractionResult {
+    func extract(transcript: String, people: [Person], contacts: [ContactSummary], creditManager: CreditManager) async throws -> ExtractionResult {
+        guard creditManager.consume() else {
+            throw APIError.insufficientCredits
+        }
+
         let peopleJSON = formatPeopleForExtraction(people)
         let contactsJSON = formatContacts(contacts)
 
@@ -170,7 +174,11 @@ class AIService {
         return try decoder.decode(ExtractionResult.self, from: textData)
     }
 
-    func query(question: String, people: [Person], contacts: [ContactSummary]) async throws -> String {
+    func query(question: String, people: [Person], contacts: [ContactSummary], creditManager: CreditManager) async throws -> String {
+        guard creditManager.consume() else {
+            throw APIError.insufficientCredits
+        }
+
         let peopleJSON = formatPeopleForQuery(people)
         let contactsJSON = formatContacts(contacts)
 

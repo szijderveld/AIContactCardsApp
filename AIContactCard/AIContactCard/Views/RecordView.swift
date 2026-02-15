@@ -10,6 +10,7 @@ struct RecordView: View {
     @Environment(VoiceService.self) private var voiceService
     @Environment(AIService.self) private var aiService
     @Environment(ContactSyncService.self) private var contactSyncService
+    @Environment(CreditManager.self) private var creditManager
     @Environment(\.modelContext) private var modelContext
 
     @Query private var people: [Person]
@@ -142,7 +143,8 @@ struct RecordView: View {
             let result = try await aiService.extract(
                 transcript: transcript,
                 people: people,
-                contacts: contactSyncService.allContacts
+                contacts: contactSyncService.allContacts,
+                creditManager: creditManager
             )
             extractionResult = result
             isProcessing = false
@@ -161,5 +163,6 @@ struct RecordView: View {
         .environment(VoiceService())
         .environment(AIService())
         .environment(ContactSyncService())
+        .environment(CreditManager())
         .modelContainer(for: [Person.self, Fact.self, Entry.self], inMemory: true)
 }

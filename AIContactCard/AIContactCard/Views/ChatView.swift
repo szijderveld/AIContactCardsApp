@@ -10,6 +10,7 @@ struct ChatView: View {
     @Environment(AIService.self) private var aiService
     @Environment(VoiceService.self) private var voiceService
     @Environment(ContactSyncService.self) private var contactSyncService
+    @Environment(CreditManager.self) private var creditManager
 
     @Query private var people: [Person]
 
@@ -169,7 +170,8 @@ struct ChatView: View {
             let response = try await aiService.query(
                 question: question,
                 people: people,
-                contacts: contactSyncService.allContacts
+                contacts: contactSyncService.allContacts,
+                creditManager: creditManager
             )
             let assistantMessage = ChatMessage(role: .assistant, content: response)
             messages.append(assistantMessage)
@@ -211,5 +213,6 @@ struct ChatView: View {
         .environment(VoiceService())
         .environment(AIService())
         .environment(ContactSyncService())
+        .environment(CreditManager())
         .modelContainer(for: [Person.self, Fact.self, Entry.self], inMemory: true)
 }
