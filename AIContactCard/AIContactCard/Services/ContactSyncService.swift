@@ -89,6 +89,18 @@ class ContactSyncService {
     }
 
     func updateContactNote(identifier: String, note: String) throws {
-        // Step 12 — write summaries back to Apple Contacts
+        let keysToFetch: [CNKeyDescriptor] = [CNContactNoteKey as CNKeyDescriptor]
+        let contact = try store.unifiedContact(withIdentifier: identifier, keysToFetch: keysToFetch)
+        let mutableContact = contact.mutableCopy() as! CNMutableContact
+        mutableContact.note = note
+        let saveRequest = CNSaveRequest()
+        saveRequest.update(mutableContact)
+        try store.execute(saveRequest)
+    }
+
+    func readContactNote(identifier: String) throws -> String {
+        let keysToFetch: [CNKeyDescriptor] = [CNContactNoteKey as CNKeyDescriptor]
+        let contact = try store.unifiedContact(withIdentifier: identifier, keysToFetch: keysToFetch)
+        return contact.note
     }
 }

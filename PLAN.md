@@ -56,7 +56,7 @@ Goal: Ask questions about your people. Integrate iPhone contacts.
   Create ChatView with a conversation-style interface. User types or speaks a question. Send to AIService.query() with all stored People/Facts and Apple Contacts as context. Display AI response. Support both text and voice input.
   Files: `Views/ChatView.swift`, `Components/MessageBubble.swift`, update TabView
 
-- [ ] **Step 12: Write summaries back to contacts (optional)**
+- [x] **Step 12: Write summaries back to contacts (optional)**
   If a Person is linked to an Apple Contact, add a button in PersonDetailView to write the AI-generated summary into that contact's Notes field. Make this opt-in per contact. Add a global toggle in Settings.
   Files: Update `Services/ContactSyncService.swift`, update `Views/PersonDetailView.swift`
 

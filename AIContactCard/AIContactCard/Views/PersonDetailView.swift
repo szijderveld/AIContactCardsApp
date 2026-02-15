@@ -10,6 +10,10 @@ struct PersonDetailView: View {
     let person: Person
     @Environment(ContactSyncService.self) private var contactSyncService
     @State private var showingAddFact = false
+    @State private var isSaving = false
+    @State private var showSaveResult = false
+    @State private var saveResultMessage = ""
+    @AppStorage("writeToContacts") private var writeToContacts = false
 
     private var groupedFacts: [(String, [Fact])] {
         let grouped = Dictionary(grouping: person.facts, by: \.category)
@@ -46,6 +50,25 @@ struct PersonDetailView: View {
                         }
                         .font(.caption)
                         .foregroundStyle(.red)
+                    }
+                    if writeToContacts && !person.summary.isEmpty {
+                        Button {
+                            isSaving = true
+                            do {
+                                try contactSyncService.updateContactNote(
+                                    identifier: contact.identifier,
+                                    note: person.summary
+                                )
+                                saveResultMessage = "Summary saved to contact notes."
+                            } catch {
+                                saveResultMessage = "Failed to save: \(error.localizedDescription)"
+                            }
+                            isSaving = false
+                            showSaveResult = true
+                        } label: {
+                            Label("Save Summary to Contact Notes", systemImage: "square.and.arrow.up")
+                        }
+                        .disabled(isSaving)
                     }
                 } else {
                     HStack(spacing: 12) {
@@ -96,6 +119,11 @@ struct PersonDetailView: View {
                     }
                 }
             }
+        }
+        .alert("Contact Notes", isPresented: $showSaveResult) {
+            Button("OK", role: .cancel) {}
+        } message: {
+            Text(saveResultMessage)
         }
         .navigationTitle(person.name)
         .toolbar {
