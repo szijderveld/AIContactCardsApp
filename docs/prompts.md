@@ -51,6 +51,9 @@ TRANSCRIPT:
 """
 ```
 
+> **Status:** Contacts are wired in as of Step 10. The `{contacts_json}` placeholder
+> is populated with real iPhone contacts from `ContactSyncService.allContacts`.
+
 ### How to Format the People List
 
 ```json

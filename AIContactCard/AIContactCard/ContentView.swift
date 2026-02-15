@@ -18,6 +18,11 @@ struct ContentView: View {
                     Label("Record", systemImage: "mic.circle.fill")
                 }
 
+            ChatView()
+                .tabItem {
+                    Label("Ask", systemImage: "bubble.left.and.text.bubble.right")
+                }
+
             NavigationStack {
                 PeopleListView()
                     .navigationDestination(for: Person.self) { person in

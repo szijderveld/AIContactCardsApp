@@ -48,11 +48,11 @@ Goal: Ask questions about your people. Integrate iPhone contacts.
   Create ContactSyncService that reads iPhone contacts via CNContactStore. Fetch name, nickname, organization, job title, emails, phones. Create ContactSummary struct. Request contacts permission and handle denial.
   Files: `Services/ContactSyncService.swift`, update `Info.plist` permissions
 
-- [ ] **Step 10: Contact matching in extraction**
+- [x] **Step 10: Contact matching in extraction**
   Update AIService.extract() prompt to include Apple Contacts as context. When AI identifies a match between a mentioned person and an existing contact, link the Person to the Apple Contact via contactIdentifier. Update extraction prompt in `docs/prompts.md`.
   Files: Update `Services/AIService.swift`, update `docs/prompts.md`
 
-- [ ] **Step 11: Chat view + query pipeline**
+- [x] **Step 11: Chat view + query pipeline**
   Create ChatView with a conversation-style interface. User types or speaks a question. Send to AIService.query() with all stored People/Facts and Apple Contacts as context. Display AI response. Support both text and voice input.
   Files: `Views/ChatView.swift`, `Components/MessageBubble.swift`, update TabView
 
