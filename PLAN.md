@@ -67,7 +67,7 @@ Goal: Billing works. Settings complete. App feels finished.
   Create CreditManager as @Observable class. Store balance in UserDefaults. Methods: consume() → Bool, add(amount), grantFreeCreditsIfNeeded() (50 free on first launch). Properties: hasCredits, isLow. Wire into AIService so every API call checks credits first. Show purchase prompt when empty.
   Files: `Services/CreditManager.swift`, update `Services/AIService.swift`
 
-- [ ] **Step 14: StoreKit 2 credit packs**
+- [x] **Step 14: StoreKit 2 credit packs**
   Add four consumable IAP products (100/600/1500/4000 credits). Create StoreKit Configuration File for testing. Implement purchase flow in CreditManager. Create CreditsView showing balance and purchase buttons with pricing.
   Files: Update `Services/CreditManager.swift`, `Views/CreditsView.swift`, add `AIContactCard/StoreKitConfig.storekit`
 

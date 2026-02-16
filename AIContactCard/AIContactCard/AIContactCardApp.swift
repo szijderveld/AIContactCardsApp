@@ -23,6 +23,8 @@ struct AIContactCardApp: App {
                 .environment(contactSyncService)
                 .environment(creditManager)
                 .task { creditManager.grantFreeCreditsIfNeeded() }
+                .task { creditManager.startListening() }
+                .task { await creditManager.loadProducts() }
         }
         .modelContainer(for: [Person.self, Fact.self, Entry.self])
     }

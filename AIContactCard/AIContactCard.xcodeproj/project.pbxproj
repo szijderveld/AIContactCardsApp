@@ -29,9 +29,30 @@
 		282C7FC12F37AE9D005F21ED /* AIContactCardUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = AIContactCardUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
+/* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
+		282C804F2F43AD66005F21ED /* Exceptions for "AIContactCard" folder in "AIContactCardTests" target */ = {
+			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
+			membershipExceptions = (
+				Products.storekit,
+			);
+			target = 282C7FB62F37AE9D005F21ED /* AIContactCardTests */;
+		};
+		282C80502F43AD66005F21ED /* Exceptions for "AIContactCard" folder in "AIContactCardUITests" target */ = {
+			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
+			membershipExceptions = (
+				Products.storekit,
+			);
+			target = 282C7FC02F37AE9D005F21ED /* AIContactCardUITests */;
+		};
+/* End PBXFileSystemSynchronizedBuildFileExceptionSet section */
+
 /* Begin PBXFileSystemSynchronizedRootGroup section */
 		282C7FAA2F37AE9B005F21ED /* AIContactCard */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
+			exceptions = (
+				282C804F2F43AD66005F21ED /* Exceptions for "AIContactCard" folder in "AIContactCardTests" target */,
+				282C80502F43AD66005F21ED /* Exceptions for "AIContactCard" folder in "AIContactCardUITests" target */,
+			);
 			path = AIContactCard;
 			sourceTree = "<group>";
 		};

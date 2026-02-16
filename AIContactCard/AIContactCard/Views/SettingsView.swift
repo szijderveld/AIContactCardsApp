@@ -6,10 +6,19 @@
 import SwiftUI
 
 struct SettingsView: View {
+    @Environment(CreditManager.self) private var creditManager
     @AppStorage("writeToContacts") private var writeToContacts = false
 
     var body: some View {
         Form {
+            Section("Credits") {
+                NavigationLink {
+                    CreditsView()
+                } label: {
+                    LabeledContent("Balance", value: "\(creditManager.balance) credits")
+                }
+            }
+
             Section {
                 Toggle("Write summaries to contacts", isOn: $writeToContacts)
             } header: {
@@ -43,4 +52,5 @@ private extension Bundle {
     NavigationStack {
         SettingsView()
     }
+    .environment(CreditManager())
 }
