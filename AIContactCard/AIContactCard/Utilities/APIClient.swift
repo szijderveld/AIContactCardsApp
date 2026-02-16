@@ -10,6 +10,7 @@ enum APIError: Error, LocalizedError {
     case networkError(Error)
     case invalidResponse
     case insufficientCredits
+    case missingAPIKey
 
     var errorDescription: String? {
         switch self {
@@ -21,6 +22,8 @@ enum APIError: Error, LocalizedError {
             return "Invalid response from server"
         case .insufficientCredits:
             return "No credits remaining. Purchase more to continue."
+        case .missingAPIKey:
+            return "BYOK mode is enabled but no API key is set. Add your Anthropic API key in Settings."
         }
     }
 }

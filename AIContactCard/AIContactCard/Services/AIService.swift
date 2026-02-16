@@ -49,8 +49,22 @@ class AIService {
     static let model = "claude-sonnet-4-5-20250929"
 
     func extract(transcript: String, people: [Person], contacts: [ContactSummary], creditManager: CreditManager) async throws -> ExtractionResult {
-        guard creditManager.consume() else {
-            throw APIError.insufficientCredits
+        let useBYOK = UserDefaults.standard.bool(forKey: "useBYOK")
+        let mode: String
+        let byokKey: String?
+
+        if useBYOK {
+            mode = "byok"
+            byokKey = KeychainHelper.read(key: "anthropicAPIKey")
+            guard let byokKey, !byokKey.isEmpty else {
+                throw APIError.missingAPIKey
+            }
+        } else {
+            mode = "managed"
+            byokKey = nil
+            guard creditManager.consume() else {
+                throw APIError.insufficientCredits
+            }
         }
 
         let peopleJSON = formatPeopleForExtraction(people)
@@ -161,7 +175,9 @@ class AIService {
 
         let data = try await APIClient.sendStructured(
             messages: messages,
-            outputSchema: outputSchema
+            outputSchema: outputSchema,
+            mode: mode,
+            apiKey: byokKey
         )
 
         // Structured outputs: response JSON is in content[0].text
@@ -175,8 +191,22 @@ class AIService {
     }
 
     func query(question: String, people: [Person], contacts: [ContactSummary], creditManager: CreditManager) async throws -> String {
-        guard creditManager.consume() else {
-            throw APIError.insufficientCredits
+        let useBYOK = UserDefaults.standard.bool(forKey: "useBYOK")
+        let mode: String
+        let byokKey: String?
+
+        if useBYOK {
+            mode = "byok"
+            byokKey = KeychainHelper.read(key: "anthropicAPIKey")
+            guard let byokKey, !byokKey.isEmpty else {
+                throw APIError.missingAPIKey
+            }
+        } else {
+            mode = "managed"
+            byokKey = nil
+            guard creditManager.consume() else {
+                throw APIError.insufficientCredits
+            }
         }
 
         let peopleJSON = formatPeopleForQuery(people)
@@ -206,7 +236,7 @@ class AIService {
             ["role": "user", "content": prompt]
         ]
 
-        let data = try await APIClient.send(messages: messages)
+        let data = try await APIClient.send(messages: messages, mode: mode, apiKey: byokKey)
         return try extractResponseText(from: data)
     }
 
