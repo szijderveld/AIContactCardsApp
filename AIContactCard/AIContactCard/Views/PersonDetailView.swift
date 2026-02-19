@@ -106,10 +106,12 @@ struct PersonDetailView: View {
             }
 
             if person.facts.isEmpty {
-                Section {
-                    Text("No facts recorded yet.")
-                        .foregroundStyle(.secondary)
-                }
+                EmptyStateView(
+                    icon: "text.badge.plus",
+                    title: "No Facts Yet",
+                    description: "Record a voice note mentioning this person to add facts automatically."
+                )
+                .listRowBackground(Color.clear)
             } else {
                 ForEach(groupedFacts, id: \.0) { category, facts in
                     Section(category) {

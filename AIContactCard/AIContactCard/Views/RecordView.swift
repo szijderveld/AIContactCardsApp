@@ -26,6 +26,8 @@ struct RecordView: View {
     var body: some View {
         NavigationStack {
             VStack(spacing: 24) {
+                CreditBanner()
+
                 // Transcript area
                 ScrollView {
                     Text(voiceService.transcript.isEmpty ? "Tap the microphone to start recording..." : voiceService.transcript)

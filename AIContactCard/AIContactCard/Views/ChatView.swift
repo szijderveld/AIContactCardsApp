@@ -23,6 +23,7 @@ struct ChatView: View {
     var body: some View {
         NavigationStack {
             VStack(spacing: 0) {
+                CreditBanner()
                 messageList
                 inputBar
             }

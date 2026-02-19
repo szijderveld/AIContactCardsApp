@@ -74,6 +74,7 @@ struct APIClient {
         var request = URLRequest(url: url)
         request.httpMethod = "POST"
         request.setValue("application/json", forHTTPHeaderField: "Content-Type")
+        request.timeoutInterval = 60
 
         let jsonData = try JSONSerialization.data(withJSONObject: body)
         request.httpBody = jsonData
@@ -83,7 +84,12 @@ struct APIClient {
         do {
             (data, response) = try await URLSession.shared.data(for: request)
         } catch {
-            throw APIError.networkError(error)
+            // Retry once for network errors
+            do {
+                (data, response) = try await URLSession.shared.data(for: request)
+            } catch {
+                throw APIError.networkError(error)
+            }
         }
 
         guard let httpResponse = response as? HTTPURLResponse else {

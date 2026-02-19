@@ -90,7 +90,7 @@ Goal: App Store ready.
   First-launch experience: 3 swipeable screens explaining the app, then request microphone, speech, and contacts permissions in sequence. Grant 50 free credits. Navigate to main app. Use PageTabViewStyle.
   Files: `Views/OnboardingView.swift`, update `AIContactCardApp.swift`
 
-- [ ] **Step 19: Edge cases + error handling**
+- [x] **Step 19: Edge cases + error handling**
   Review all views for: empty states (no people, no facts, no credits), error states (API failure, network offline, permission denied), loading states during AI calls. Add retry for failed API calls. Add low-credit banner component.
   Files: `Components/EmptyStateView.swift`, `Components/CreditBanner.swift`, updates across views
 

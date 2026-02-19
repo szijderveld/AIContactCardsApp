@@ -13,10 +13,10 @@ struct PeopleListView: View {
     var body: some View {
         Group {
             if people.isEmpty {
-                ContentUnavailableView(
-                    "No People Yet",
-                    systemImage: "person.crop.circle.badge.questionmark",
-                    description: Text("People you talk about will appear here.")
+                EmptyStateView(
+                    icon: "person.crop.circle.badge.questionmark",
+                    title: "No People Yet",
+                    description: "Record a voice note on the Record tab to get started."
                 )
             } else {
                 List(people) { person in
