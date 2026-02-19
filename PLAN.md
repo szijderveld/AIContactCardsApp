@@ -86,7 +86,7 @@ Goal: App Store ready.
   Design and add app icon to asset catalog (1024x1024 master). Create a simple launch screen.
   Files: `Assets.xcassets`, `LaunchScreen`
 
-- [ ] **Step 18: Onboarding flow**
+- [x] **Step 18: Onboarding flow**
   First-launch experience: 3 swipeable screens explaining the app, then request microphone, speech, and contacts permissions in sequence. Grant 50 free credits. Navigate to main app. Use PageTabViewStyle.
   Files: `Views/OnboardingView.swift`, update `AIContactCardApp.swift`
 

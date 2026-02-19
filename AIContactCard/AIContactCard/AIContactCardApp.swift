@@ -17,7 +17,7 @@ struct AIContactCardApp: App {
 
     var body: some Scene {
         WindowGroup {
-            ContentView()
+            RootView()
                 .environment(voiceService)
                 .environment(aiService)
                 .environment(contactSyncService)
@@ -27,5 +27,17 @@ struct AIContactCardApp: App {
                 .task { await creditManager.loadProducts() }
         }
         .modelContainer(for: [Person.self, Fact.self, Entry.self])
+    }
+}
+
+private struct RootView: View {
+    @AppStorage("hasCompletedOnboarding") private var hasCompletedOnboarding = false
+
+    var body: some View {
+        if hasCompletedOnboarding {
+            ContentView()
+        } else {
+            OnboardingView()
+        }
     }
 }
