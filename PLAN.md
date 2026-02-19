@@ -71,18 +71,18 @@ Goal: Billing works. Settings complete. App feels finished.
   Add four consumable IAP products (100/600/1500/4000 credits). Create StoreKit Configuration File for testing. Implement purchase flow in CreditManager. Create CreditsView showing balance and purchase buttons with pricing.
   Files: Update `Services/CreditManager.swift`, `Views/CreditsView.swift`, add `AIContactCard/StoreKitConfig.storekit`
 
-- [ ] **Step 15: BYOK API key option**
+- [x] **Step 15: BYOK API key option**
   Add toggle in Settings between managed credits and BYOK. When BYOK, show SecureField for Anthropic API key. Store key in Keychain. Pass mode:"byok" to proxy. Skip credit checks when BYOK is active.
   Files: `Utilities/KeychainHelper.swift`, update `Views/SettingsView.swift`, update `Services/AIService.swift`
 
-- [ ] **Step 16: Settings view**
+- [x] **Step 16: Settings view**
   Create SettingsView with sections: API mode (credits vs BYOK), credit balance + buy button, contact sync preferences, app info/version. Wire into TabView.
   Files: `Views/SettingsView.swift`, update `Views/ContentView.swift`
 
 ## Phase 5: Ship
 Goal: App Store ready.
 
-- [ ] **Step 17: App icon + launch screen**
+- [x] **Step 17: App icon + launch screen**
   Design and add app icon to asset catalog (1024x1024 master). Create a simple launch screen.
   Files: `Assets.xcassets`, `LaunchScreen`
 
