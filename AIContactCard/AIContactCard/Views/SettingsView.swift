@@ -7,7 +7,6 @@ import SwiftUI
 
 struct SettingsView: View {
     @Environment(CreditManager.self) private var creditManager
-    @AppStorage("writeToContacts") private var writeToContacts = false
     @AppStorage("useBYOK") private var useBYOK = false
     @State private var apiKey = ""
 
@@ -15,6 +14,7 @@ struct SettingsView: View {
         Form {
             Section {
                 Toggle("Use your own API key", isOn: $useBYOK)
+                    .tint(Theme.accent)
                 if useBYOK {
                     SecureField("Anthropic API Key", text: $apiKey)
                         .textContentType(.password)
@@ -39,26 +39,24 @@ struct SettingsView: View {
             }
 
             if !useBYOK {
-                Section("Credits") {
+                Section("Balance") {
                     NavigationLink {
                         CreditsView()
                     } label: {
-                        LabeledContent("Balance", value: "\(creditManager.balance) credits")
+                        LabeledContent("Balance", value: creditManager.formattedBalance)
                     }
                 }
-            }
-
-            Section {
-                Toggle("Write summaries to contacts", isOn: $writeToContacts)
-            } header: {
-                Text("Contacts")
-            } footer: {
-                Text("When enabled, you can save AI-generated summaries to linked Apple Contacts' notes field.")
             }
 
             Section("About") {
                 LabeledContent("App", value: Bundle.main.appName)
                 LabeledContent("Version", value: Bundle.main.appVersion)
+            }
+
+            Section("Legal") {
+                NavigationLink("Privacy Policy") {
+                    PrivacyPolicyView()
+                }
             }
         }
         .navigationTitle("Settings")

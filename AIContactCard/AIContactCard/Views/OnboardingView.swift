@@ -14,7 +14,9 @@ struct OnboardingView: View {
     @State private var micGranted: Bool?
     @State private var contactsGranted: Bool?
 
-    private let totalPages = 5
+    @State private var showPrivacyPolicy = false
+
+    private let totalPages = 6
 
     var body: some View {
         VStack(spacing: 0) {
@@ -43,7 +45,7 @@ struct OnboardingView: View {
                 permissionPage(
                     icon: "mic.fill",
                     title: "Microphone & Speech",
-                    description: "The app needs microphone access to hear you and speech recognition to understand what you say. All processing stays on your device.",
+                    description: "The app needs microphone access to hear you and speech recognition to understand what you say. Voice recognition runs on your device. Transcripts are sent to Anthropic's AI to extract information about people.",
                     granted: micGranted
                 )
                 .tag(3)
@@ -51,10 +53,13 @@ struct OnboardingView: View {
                 permissionPage(
                     icon: "person.crop.rectangle.stack.fill",
                     title: "Contacts Access",
-                    description: "Linking to your contacts helps the AI match people you mention with contacts you already have.",
+                    description: "Linking to your contacts helps the AI match people you mention with contacts you already have. Contact names are shared with the AI to match people you mention.",
                     granted: contactsGranted
                 )
                 .tag(4)
+
+                consentPage()
+                    .tag(5)
             }
             .tabViewStyle(.page(indexDisplayMode: .always))
             .animation(.easeInOut, value: currentPage)
@@ -125,6 +130,41 @@ struct OnboardingView: View {
         }
     }
 
+    private func consentPage() -> some View {
+        VStack(spacing: 24) {
+            Spacer()
+            Image(systemName: "lock.shield.fill")
+                .font(.system(size: 80))
+                .foregroundStyle(.accent)
+            Text("Your Data & Privacy")
+                .font(.title.bold())
+                .multilineTextAlignment(.center)
+            Text("Your voice transcripts and contact names are sent to Anthropic's Claude AI to extract and look up information about people. Your data is not used to train AI models.")
+                .font(.body)
+                .foregroundStyle(.secondary)
+                .multilineTextAlignment(.center)
+                .padding(.horizontal, 32)
+
+            Button("Read Full Privacy Policy") {
+                showPrivacyPolicy = true
+            }
+            .font(.subheadline)
+
+            Spacer()
+            Spacer()
+        }
+        .sheet(isPresented: $showPrivacyPolicy) {
+            NavigationStack {
+                PrivacyPolicyView()
+                    .toolbar {
+                        ToolbarItem(placement: .topBarTrailing) {
+                            Button("Done") { showPrivacyPolicy = false }
+                        }
+                    }
+            }
+        }
+    }
+
     // MARK: - Button
 
     private var buttonLabel: String {
@@ -136,7 +176,9 @@ struct OnboardingView: View {
         case 3:
             return micGranted == nil ? "Enable Microphone" : "Continue"
         case 4:
-            return contactsGranted == nil ? "Enable Contacts" : "Start Using App"
+            return contactsGranted == nil ? "Enable Contacts" : "Continue"
+        case 5:
+            return "I Understand"
         default:
             return "Continue"
         }
@@ -165,8 +207,10 @@ struct OnboardingView: View {
                     }
                 }
             } else {
-                hasCompletedOnboarding = true
+                withAnimation { currentPage += 1 }
             }
+        case 5:
+            hasCompletedOnboarding = true
         default:
             break
         }

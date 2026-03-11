@@ -94,12 +94,77 @@ Goal: App Store ready.
   Review all views for: empty states (no people, no facts, no credits), error states (API failure, network offline, permission denied), loading states during AI calls. Add retry for failed API calls. Add low-credit banner component.
   Files: `Components/EmptyStateView.swift`, `Components/CreditBanner.swift`, updates across views
 
-- [ ] **Step 20: TestFlight beta**
+## Phase 6: Security Hardening
+Goal: Fix all vulnerabilities and compliance gaps before App Store submission.
+
+### Mandatory — App Store Blockers
+
+- [x] **Step 20: Privacy Policy & Disclosure**
+  Write a privacy policy covering: data collected (transcripts, contacts, facts), third-party processing (Anthropic Claude API, Cloudflare), data retention, user rights (access, deletion). Host it at a public URL. Add a link in SettingsView. Fix misleading onboarding text — replace "All processing stays on your device" with accurate disclosure that transcripts and contact names are sent to Anthropic's AI for processing. Add explicit consent step before first API call.
+  Files: `Views/OnboardingView.swift`, `Views/SettingsView.swift`, privacy policy document
+
+- [ ] **Step 21: Proxy Authentication**
+  Add request signing to prevent unauthorized use of the proxy. Generate a shared secret, embed it in the app, sign each request with HMAC-SHA256. Proxy validates signature before forwarding. This prevents anyone without the app from using your API key.
+  Files: `proxy/src/index.js`, `Utilities/APIClient.swift`
+
+- [ ] **Step 22: Proxy Rate Limiting & Model Whitelist**
+  Add per-IP rate limiting using Cloudflare Workers KV (e.g. 30 requests/minute). Whitelist allowed models to `claude-sonnet-4-5-20250929` only — reject any other model value. Add request timeout via AbortController (30s).
+  Files: `proxy/src/index.js`, `proxy/wrangler.toml`
+
+- [ ] **Step 23: Server-Side Credit Enforcement**
+  Move credit tracking to the proxy. Store per-device credit balances in Cloudflare KV. Proxy checks balance before forwarding to Claude API, deducts after response. App sends a device identifier with each request. This eliminates all client-side credit tampering.
+  Files: `proxy/src/index.js`, `proxy/wrangler.toml`, `Utilities/APIClient.swift`, `Services/CreditManager.swift`, `Services/AIService.swift`
+
+### High Priority — Significant Risk
+
+- [ ] **Step 24: Server-Side Purchase Verification**
+  When a StoreKit purchase completes, send the transaction JWS to the proxy for verification using Apple's App Store Server API. Proxy validates the signed transaction, then credits the device balance in KV. Remove client-side credit granting.
+  Files: `proxy/src/index.js`, `Services/CreditManager.swift`
+
+- [ ] **Step 25: Thread-Safe CreditManager**
+  Convert CreditManager to a Swift Actor or add serial DispatchQueue to prevent race conditions on balance mutations. Ensure `hasCredits` check and `deduct()` are atomic — reserve credits before the API call, release or confirm after.
+  Files: `Services/CreditManager.swift`, `Services/AIService.swift`
+
+- [ ] **Step 26: Sanitize Error Messages**
+  Map HTTP error codes to user-friendly messages. Never show raw API response bodies. Log full error details locally for debugging but display only generic messages in the UI (e.g. "Request failed — please try again").
+  Files: `Utilities/APIClient.swift`, `Services/AIService.swift`
+
+- [ ] **Step 27: StoreKit Transaction Deduplication**
+  Store processed transaction IDs (in UserDefaults or Keychain) to prevent double-crediting on app restart. Check transaction ID before granting credits. Handle `Transaction.updates` edge cases (crash between verify and finish).
+  Files: `Services/CreditManager.swift`
+
+### Medium Priority — Should Address
+
+- [ ] **Step 28: Prompt Injection Mitigation**
+  Sanitize transcript and contact data before embedding in Claude prompts. Escape triple-quote sequences, limit transcript length with a hard character cap, use JSON encoding rather than string interpolation for structured data in prompts.
+  Files: `Services/AIService.swift`
+
+- [ ] **Step 29: Keychain Hardening**
+  Add `kSecAttrAccessibleWhenUnlockedThisDeviceOnly` to all Keychain operations so API keys cannot be extracted via device backup/restore. Clear BYOK key from @State memory when SettingsView disappears.
+  Files: `Utilities/KeychainHelper.swift`, `Views/SettingsView.swift`
+
+- [ ] **Step 30: Data Management & GDPR Compliance**
+  Add data export (JSON) in Settings so users can download all their stored data. Add "Delete All Data" option. Add data retention — auto-delete Entry (transcript) records older than 90 days. Show transcript deletion option per-entry.
+  Files: `Views/SettingsView.swift`, new `Utilities/DataExporter.swift`
+
+- [ ] **Step 31: Remove CORS & Tighten Proxy Headers**
+  Remove `Access-Control-Allow-Origin: *` from proxy (not a web API). Add User-Agent validation to only accept requests from the iOS app. Remove any unnecessary response headers.
+  Files: `proxy/src/index.js`
+
+- [ ] **Step 32: Free Credits Abuse Prevention**
+  Tie free credit grant to a server-side device ID check (via proxy + KV). Each device gets free credits once, enforced server-side. Cannot be reset by reinstalling the app.
+  Files: `proxy/src/index.js`, `Services/CreditManager.swift`
+
+---
+
+## Phase 7: Ship
+
+- [ ] **Step 33: TestFlight beta**
   Archive in Xcode, upload to App Store Connect. Set up TestFlight. Create IAP products in App Store Connect matching StoreKit config. Invite beta testers.
   Manual process — no code changes.
 
-- [ ] **Step 21: App Store submission**
-  Write App Store description, keywords, privacy policy. Take screenshots on multiple device sizes. Submit for review.
+- [ ] **Step 34: App Store submission**
+  Write App Store description, keywords. Link privacy policy URL. Take screenshots on multiple device sizes. Submit for review.
   Files: Marketing copy — Claude can help draft these.
 
 ---
