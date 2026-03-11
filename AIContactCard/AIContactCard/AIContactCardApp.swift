@@ -15,6 +15,27 @@ struct AIContactCardApp: App {
     @State private var contactSyncService = ContactSyncService()
     @State private var creditManager = CreditManager()
 
+    let modelContainer: ModelContainer
+
+    init() {
+        let schema = Schema([Person.self, Fact.self, Entry.self])
+        let config = ModelConfiguration(schema: schema)
+        do {
+            modelContainer = try ModelContainer(for: schema, configurations: [config])
+        } catch {
+            // Schema migration failed — delete the old store and retry
+            let url = config.url
+            let related = [
+                url.deletingPathExtension().appendingPathExtension("store-shm"),
+                url.deletingPathExtension().appendingPathExtension("store-wal")
+            ]
+            for file in [url] + related {
+                try? FileManager.default.removeItem(at: file)
+            }
+            modelContainer = try! ModelContainer(for: schema, configurations: [config])
+        }
+    }
+
     var body: some Scene {
         WindowGroup {
             RootView()
@@ -22,11 +43,11 @@ struct AIContactCardApp: App {
                 .environment(aiService)
                 .environment(contactSyncService)
                 .environment(creditManager)
-                .task { creditManager.grantFreeCreditsIfNeeded() }
+                .task { await creditManager.fetchBalance() }
                 .task { creditManager.startListening() }
                 .task { await creditManager.loadProducts() }
         }
-        .modelContainer(for: [Person.self, Fact.self, Entry.self])
+        .modelContainer(modelContainer)
     }
 }
 
