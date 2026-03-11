@@ -4,6 +4,7 @@
 //
 
 import Foundation
+import CryptoKit
 
 enum APIError: Error, LocalizedError {
     case httpError(statusCode: Int, body: String)
@@ -31,6 +32,7 @@ enum APIError: Error, LocalizedError {
 struct APIClient {
     static let proxyURL = "https://ai-contact-card-proxy.ai-contact-cards-sz.workers.dev"
     static let model = "claude-sonnet-4-5-20250929"
+    private static let signingSecret = "e796e5caad933d9a0c95f0f285c81b27f4d812ac2c0af4aec9d839332c0ae778"
 
     /// Standard call (query) — free-form text response
     static func send(messages: [[String: Any]], mode: String = "managed", apiKey: String? = nil) async throws -> Data {
@@ -77,6 +79,17 @@ struct APIClient {
         request.timeoutInterval = 60
 
         let jsonData = try JSONSerialization.data(withJSONObject: body)
+        let bodyString = String(data: jsonData, encoding: .utf8) ?? ""
+
+        // HMAC-SHA256 request signing
+        let timestamp = String(Int(Date().timeIntervalSince1970))
+        let message = "\(timestamp).\(bodyString)"
+        let key = SymmetricKey(data: Data(signingSecret.utf8))
+        let mac = HMAC<SHA256>.authenticationCode(for: Data(message.utf8), using: key)
+        let signature = mac.map { String(format: "%02x", $0) }.joined()
+
+        request.setValue(timestamp, forHTTPHeaderField: "X-Timestamp")
+        request.setValue(signature, forHTTPHeaderField: "X-Signature")
         request.httpBody = jsonData
 
         let data: Data
